@@ -47,7 +47,7 @@ module.exports = {
 }
 
 */
-const expr = "00101010100000000010";
+const expr = "00101010100000000010001011101000101110100000111111**********00001011110000111111000010111000101110100000111010";
 
 function morse(expr) {
     let arrBinar = Object.values(expr); // 
@@ -55,56 +55,60 @@ function morse(expr) {
     let subArr = []; // Собираем вложенный массив из массивов со значениями букв (по 10 элементов в каждом)
 
     for (let i = 0; i <= arrBinar.length; i++) {
-        if (i > 0 && i % 10 === 0) {
-            // Если i больше нуля и кратно 10, добавляем массив с буквами в subArr
+        if (i > 0 && i % 10 === 0) { // Если i больше нуля и кратно 10, добавляем массив с буквами в subArr
             subArr.push(arrLetters);
-            arrLetters = [];
-            // Обнуляем массив для новых 10 значений
-            arrLetters.push(arrBinar[i]);
-            // Добавляем первое значение что бы не пропускать иттерацию
+            arrLetters = []; // Обнуляем массив для новых 10 значений
+            arrLetters.push(arrBinar[i]); // Добавляем первое значение что бы не пропускать иттерацию
         } else {
-            arrLetters.push(arrBinar[i]);
-            // Собирем значения в массив по 10
+            arrLetters.push(arrBinar[i]); // Собирем значения в массив по 10
         }
     }
 
-    //console.log(subArr);
+    let arrayLetters = [];
+    for (let i = 0; i < subArr.length; i++) {
+        let indexStart = subArr[i].indexOf('1'); // Получаем индекс начала буквы
+        arrayLetters[i] = subArr[i].slice(indexStart).join('');
+    }
+    let letters = arrayLetters.join(' ').split(' ');
 
-    return subArr.reduce((acc, value, index) => {
-        console.log(value);
-        if (value !== 'number') {
-            console.log('Не цифра');
-            let index = value.indexOf('1') - 1; // Получаем индекс начала буквы
-            console.log(index);
-        } else {
-            console.log('Цифра');
+    // console.log(letters);
+
+    morseArray = letters.map(function (value) {
+        let morseArray = '';
+        for (let i = 0; i < value.length; i += 2) {
+            let letter = value.slice(i, i + 2);
+            switch (letter) {
+                case '*': morseArray += ' '; break;
+                case '10': morseArray += '.'; break;
+                case '11': morseArray += '-'; break;
+            }
+        }
+        return morseArray;
+    });
+    console.log(morseArray);
+
+    /* for (let item in MORSE_TABLE) {
+ 
+         if (morseArray.includes(item)) {
+             result += MORSE_TABLE[item];
+         }
+     }*/
+    result = '';
+    for (let item in MORSE_TABLE) {
+
+        console.log(item);
+        console.log(morseArray);
+
+        if (morseArray.includes(item)) {
+            result += MORSE_TABLE[item];
         }
 
-    }, []);
+
+    }
 
 
-    // console.log(subArr);
+    // console.log(result);
 
 }
 
 morse(expr);
-
-
-
-
-
-// const expr = "0010101010 0000000010 001011101000101110100000111111**********00001011110000111111000010111000101110100000111010";
-// const result = "hello world";
-
-/*
- arrMorse.reduce((acc, value, index) => {
-     console.log(index);
-     if (index > 0 && index % 10 === 0) {
-         subArr.push(acc);
-         acc = [];
-         return acc + value;
-     } else {
-         return acc + value;
-     }
- }, []);
- */
